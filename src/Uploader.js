@@ -1,34 +1,44 @@
 import React from 'react'
 import Dropzone from 'react-dropzone'
 import axios from 'axios'
+import Spinner from 'react-spinkit'
 
 class Uploader extends React.Component {
   constructor() {
     super()
-    this.state = { files: [], prediction: ''}
+    this.renderPrediction = this.renderPrediction.bind(this)
+    this.state = { files: [], prediction: '', isLoading: false }
   }
 
   onDrop(files) {
     this.setState({
-      files
+      files,
+      isLoading: true
     });
 
-    const url = 'http://localhost:5000/classifier'
+    const url = 'https://pacific-meadow-70336.herokuapp.com/classifier'
     files.forEach(file => {
-      const response = axios.post(url, file, {
+    axios.post(url, file, {
         headers: {
           'Content-Type': file.type
         }
-      }).then(response => this.setState({ prediction: response.data.prediction }))
+      }).then((response) =>{
+        this.setState({ prediction: response.data.prediction, isLoading: false })
+      })
     });
-
-    // req.end(callback);
   }
 
   onCancel() {
     this.setState({
       files: []
     });
+  }
+
+  renderPrediction() {
+    if (this.state.isLoading) {
+      return <Spinner name="pacman" color="fuchsia" style={{ marginLeft: '2em', marginTop: '.2em' }} />
+    }
+    return this.state.prediction
   }
 
   render() {
@@ -43,7 +53,7 @@ class Uploader extends React.Component {
           </Dropzone>
         </div>
         <aside style={{ fontSize: '2em' }}>
-          { this.state.prediction }
+          { this.renderPrediction() }
         </aside>
       </section>
     );
