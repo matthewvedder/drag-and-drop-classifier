@@ -49,7 +49,7 @@ class Uploader extends React.Component {
             onDrop={this.onDrop.bind(this)}
             onFileDialogCancel={this.onCancel.bind(this)}
           >
-            <p>Try dropping some files here, or click to select files to upload.</p>
+            <p>Upload a Chris! Evans, Pratt, Hemsworth, or Pine</p>
           </Dropzone>
         </div>
         <aside style={{ fontSize: '2em' }}>
